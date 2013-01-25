@@ -1,0 +1,20 @@
+{
+	"schema_version": "1.2",
+	"packages": [
+		{
+			"name": "StringUtilities",
+			"description": "StringUtilities is a Sublime Text 2 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver).",
+			"author": "Avtandil Kikabidze",
+			"homepage": "https://github.com/LONGMANi/sublimetext-autobackups",
+			"last_modified": "2013-01-26 05:04:31",
+			"platforms": {
+				"*": [
+					{
+						"version": "1.0.1",
+						"url": "https://nodeload.github.com/LONGMANi/sublimetext-autobackups/zip/1.0.1"
+					}
+				]
+			}
+		}
+	]
+}
