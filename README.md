@@ -10,6 +10,12 @@ When you edit text files (scripts, prose, whatever) you often find yourself wish
 
 ## Installation
 
+ * Install [Package Manager][1].
+ * Use `Cmd+Shift+P` or `Ctrl+Shift+P` then `Package Control: Install Package`.
+ * Look for `AutoBackups` and install it.
+
+If you prefer to install manually, install git, then:
+
     git clone https://github.com/LONGMANi/sublimetext-autobackups "<Sublime Text 2 Packages folder>/AutoBackups"
 
 To change where the backups are stored, access the plugin's settings in `Preferences->Package Settings->AutoBackups`.
