@@ -35,6 +35,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         if (on_load_event & self.is_backup_file(filename)):
             return
 
+        # not create file if exists
         if (on_load_event & os.path.isfile(newname)):
             return
 
