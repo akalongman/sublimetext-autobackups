@@ -6,7 +6,7 @@
     // My Documents/Sublime Text Backups (Windows) or ~/sublime_backups (Linux/OSX).
     "backup_dir": "",
 
-    // If true, also save a backup copy any time a file is opened
+    // If true, also save a backup copy any time a file is opened (if backup file not exists)
     "backup_on_open_file": true,
 
     // Files larger than this many bytes won't be backed up.
