@@ -1,22 +1,19 @@
 sublimetext-autobackup
 ======================
 
-Sublime Text 2 Auto backup plugin
+Sublime Text 3 Auto backup plugin
 
-AutoBackups is a Sublime Text 2 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver)
+AutoBackups is a Sublime Text 3 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver)
 
 When you edit text files (scripts, prose, whatever) you often find yourself wishing for an last version. Ever accidentally deleted a chunk from an important configuration file, or wished you could roll back a document a few hours? This plugin takes a copy of file you open/save and copies it into a backup directory structure, ensuring that you never lose an old version of a file.
 
 
 ## Installation
+The only viable install method right now is via Git:
 
- * Install [Package Manager][1].
- * Use `Cmd+Shift+P` or `Ctrl+Shift+P` then `Package Control: Install Package`.
- * Look for `AutoBackups` and install it.
-
-If you prefer to install manually, install git, then:
-
-    git clone https://github.com/LONGMANi/sublimetext-autobackups "<Sublime Text 2 Packages folder>/AutoBackups"
+    git clone https://github.com/LONGMANi/sublimetext-autobackups "<Sublime Text 3 Packages folder>/AutoBackups"
+    cd "AutoBackups"
+    git checkout ST3
 
 To change where the backups are stored, access the plugin's settings in `Preferences->Package Settings->AutoBackups`.
 
