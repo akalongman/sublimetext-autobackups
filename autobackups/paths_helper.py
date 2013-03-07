@@ -6,7 +6,7 @@ import re
 import sys
 
 if sublime.platform() == 'windows':
-    from .win_helper import WinHelper
+    from AutoBackups.autobackups.win_helper import WinHelper
 
 
 class PathsHelper(object):

@@ -1,13 +1,17 @@
-# Sublime Text 2 event listeners and commands interface for autobackups.
-
 import sublime
 import sublime_plugin
+import sys
 import os
 import shutil
 
-from .paths_helper import PathsHelper
 
-#settings = sublime.load_settings('AutoBackups.sublime-settings')
+reloader_name = 'AutoBackups.autobackups.reloader'
+from imp import reload
+if reloader_name in sys.modules:
+    reload(sys.modules[reloader_name])
+
+from .autobackups import reloader
+from AutoBackups.autobackups.paths_helper import PathsHelper
 
 
 class AutoBackupsEventListener(sublime_plugin.EventListener):
