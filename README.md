@@ -16,7 +16,7 @@ When you edit text files (scripts, prose, whatever) you often find yourself wish
 
 If you prefer to install manually, install git, then:
 
-    git clone https://github.com/LONGMANi/sublimetext-autobackups "<Sublime Text 2 Packages folder>/AutoBackups"
+    git clone https://github.com/akalongman/sublimetext-autobackups "<Sublime Text 2 Packages folder>/AutoBackups"
 
 To change where the backups are stored, access the plugin's settings in `Preferences->Package Settings->AutoBackups`.
 
@@ -42,7 +42,7 @@ Created by [Avtandil Kikabidze][3].
 
 Originally Automatic Backups plugin authored by [Joel Thornton][2].
 
- [0]: https://github.com/LONGMANi/sublimetext-autobackups
+ [0]: https://github.com/akalongman/sublimetext-autobackups
  [1]: http://wbond.net/sublime_packages/package_control
  [2]: https://github.com/joelpt/sublimetext-automatic-backups
  [3]: mailto:akalongman@gmail.com
