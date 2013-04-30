@@ -13,9 +13,11 @@ class PathsHelper(object):
 
     @staticmethod
     def get_base_dir():
-        settings = sublime.load_settings('AutoBackups.sublime-settings')
+        platform = sublime.platform().title()
+        settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
         # Configured setting
         backup_dir =  settings.get('backup_dir')
+
 
         if backup_dir != '':
             return os.path.expanduser(backup_dir)

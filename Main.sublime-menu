@@ -17,12 +17,32 @@
                         [
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/AutoBackups/AutoBackups.sublime-settings"},
+                                "args": {"file": "${packages}/AutoBackups/AutoBackups (Windows).sublime-settings", "platform": "Windows"},
                                 "caption": "Settings – Default"
                             },
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/AutoBackups.sublime-settings"},
+                                "args": {"file": "${packages}/AutoBackups/AutoBackups (Linux).sublime-settings", "platform": "Linux"},
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {"file": "${packages}/AutoBackups/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {"file": "${packages}/User/AutoBackups (Windows).sublime-settings", "platform": "Windows"},
+                                "caption": "Settings – User"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {"file": "${packages}/User/AutoBackups (Linux).sublime-settings", "platform": "Linux"},
+                                "caption": "Settings – User"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {"file": "${packages}/User/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
                                 "caption": "Settings – User"
                             },
                             { "caption": "-" }
