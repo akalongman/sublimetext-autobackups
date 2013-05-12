@@ -17,20 +17,25 @@ from AutoBackups.autobackups.paths_helper import PathsHelper
 
 
 class AutoBackupsEventListener(sublime_plugin.EventListener):
-	platform = sublime.platform().title()
-	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+
+	def getSettings(self):
+		platform = sublime.platform().title()
+		settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+		return settings
+
 
 	def on_post_save_async(self, view):
 		self.save_backup(view, 0)
 
 	def on_load_async(self, view):
-		#settings = sublime.load_settings('AutoBackups.sublime-settings')
-		if self.settings.get('backup_on_open_file'):
+		settings = self.getSettings()
+		if settings.get('backup_on_open_file'):
 			self.save_backup(view, 1)
 
 	def save_backup(self, view, on_load_event):
+		settings = self.getSettings()
 		# don't save files above configured size
-		if view.size() > self.settings.get('max_backup_file_size_bytes'):
+		if view.size() > settings.get('max_backup_file_size_bytes'):
 			print ('Backup not saved, file too large (%d bytes)' % view.size())
 			return
 
