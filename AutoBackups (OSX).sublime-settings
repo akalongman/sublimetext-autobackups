@@ -1,0 +1,15 @@
+{
+    // Don't make changes to this file directly as they can get wiped out when the
+    // plugin is updated. Instead transfer what you need to the 'Settings - User' file.
+
+    // The directory where we'll keep our backups. If empty, we'll try to put them in
+    // ~/sublime_backups
+    "backup_dir": "~/sublime_backups",
+
+    // If true, also save a backup copy any time a file is opened (if backup file not exists)
+    "backup_on_open_file": true,
+
+    // Files larger than this many bytes won't be backed up.
+    "max_backup_file_size_bytes": 262144 // = 256 KB
+
+}
