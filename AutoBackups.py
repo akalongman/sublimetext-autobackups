@@ -71,7 +71,6 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 		newname = PathsHelper.get_backup_filepath(filename)
 		if newname == None:
 			return
-		print(newname)
 		# not create file backup if current file is backup
 
 		if on_load_event & self.is_backup_file(filename):
