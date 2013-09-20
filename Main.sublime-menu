@@ -27,7 +27,7 @@
                             },
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/AutoBackups/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
+                                "args": {"file": "${packages}/AutoBackups/AutoBackups (Osx).sublime-settings", "platform": "OSX"},
                                 "caption": "Settings – Default"
                             },
                             {
@@ -42,7 +42,7 @@
                             },
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
+                                "args": {"file": "${packages}/User/AutoBackups (Osx).sublime-settings", "platform": "OSX"},
                                 "caption": "Settings – User"
                             },
                             { "caption": "-" }
