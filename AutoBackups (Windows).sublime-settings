@@ -12,6 +12,9 @@
 	// If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23
 	"backup_per_day": false,
 
+	// If true, backups saved per save, in separate folders, for example D:/Sublime Text Backups/2013-05-23/235034
+	"backup_per_time": false,
+
 	// Files larger than this many bytes won't be backed up.
 	"max_backup_file_size_bytes": 262144 // = 256 KB
 
