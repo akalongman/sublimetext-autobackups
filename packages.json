@@ -10,8 +10,8 @@
 			"platforms": {
 				"*": [
 					{
-						"version": "1.4",
-						"url": "https://nodeload.github.com/akalongman/sublimetext-autobackups/zip/1.4"
+						"version": "1.5.1",
+						"url": "https://nodeload.github.com/akalongman/sublimetext-autobackups/zip/1.5.1"
 					}
 				]
 			}

@@ -9,10 +9,14 @@
 	// If true, also save a backup copy any time a file is opened (if backup file not exists)
 	"backup_on_open_file": true,
 
-	// If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23
+	// If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23/myfile.php
 	"backup_per_day": false,
 
-	// If true, backups saved per save, in separate folders, for example D:/Sublime Text Backups/2013-05-23/235034
+	// If set, backups saved per second. possible values: false, "folder" or "file"
+	// false - disabled backup per second
+	// "folder" - backup example D:/Sublime Text Backups/2013-05-23/095034/myfile.php
+	// "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
+	// to use this feature, you must have enabled backup_per_day setting
 	"backup_per_time": false,
 
 	// Files larger than this many bytes won't be backed up.

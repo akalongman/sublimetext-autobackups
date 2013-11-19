@@ -77,13 +77,10 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 			return
 
 		# not create file if exists
-
 		if on_load_event & os.path.isfile(newname):
 			return
 
 		(backup_dir, file_to_write) = os.path.split(newname)
-
-		# not create file backup on open event if current file is backup
 
 		if os.access(backup_dir, os.F_OK) == False:
 			os.makedirs(backup_dir)
@@ -93,9 +90,14 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 		self.console('Backup saved to: '+newname.replace('\\', '/'))
 
 	def is_backup_file(self, path):
+		settings = self.getSettings()
+		backup_per_time = settings.get('backup_per_time')
 		path = PathsHelper.normalise_path(path)
 		base_dir = PathsHelper.get_base_dir(False)
 		base_dir = PathsHelper.normalise_path(base_dir)
+		if (backup_per_time == 'folder'):
+			base_dir = base_dir[:-7]
+
 		backup_dir_len = len(base_dir)
 		sub = path[0:backup_dir_len]
 
@@ -109,11 +111,12 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 
 class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
+	platform = sublime.platform().title()
+	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+	datalist = []
 
 	def run(self, edit):
-		platform = sublime.platform().title()
-		settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
-		backup_per_day = settings.get('backup_per_day')
+		backup_per_day = self.settings.get('backup_per_day')
 
 		if (not backup_per_day):
 			window = sublime.active_window()
@@ -125,39 +128,131 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 			else:
 				sublime.error_message('Backup for ' + filepath + ' not exists!')
 		else:
-			f_files = self.getFiles()
+			f_files = self.getData(False)
 
 			if not f_files:
 				sublime.error_message('Backups for this file not exists!')
 				return
 
-			f_files.reverse()
-			self.view.window().show_quick_panel(f_files, self.open)
+			backup_per_time = self.settings.get('backup_per_time')
+			if (backup_per_time):
+				self.view.window().show_quick_panel(f_files, self.timeFolders)
+			else:
+				self.view.window().show_quick_panel(f_files, self.openFile)
 			return
 
-	def getFiles(self):
+
+
+
+	def getData(self, time_folder):
 		filename = PathsHelper.normalise_path(self.view.file_name(), True)
 		basedir = PathsHelper.get_base_dir(True)
 
-		f_files = []
-		for folder in os.listdir(basedir):
-			fl = basedir+'/'+folder+'/'+filename
-			match = re.search(r"[0-9+]{4}-[0-9+]{2}-[0-9+]{2}", folder)
-			if os.path.isfile(fl) and match is not None:
-				folder_name, file_name = os.path.split(fl)
-				f_file = []
-				f_file.append(folder+' - '+file_name)
-				f_file.append(fl)
-				f_files.append(f_file)
+		backup_per_time = self.settings.get('backup_per_time')
+		if (backup_per_time):
+			if (backup_per_time == 'folder'):
+				f_files = []
+				if (time_folder is not False):
+					tm_folders = self.getData(False)
+					tm_folder = tm_folders[time_folder][0]
+					basedir = basedir+'/'+tm_folder
+					for folder in os.listdir(basedir):
+						fl = basedir+'/'+folder+'/'+filename
+						match = re.search(r"^[0-9+]{6}$", folder)
+						if os.path.isfile(fl) and match is not None:
+							folder_name, file_name = os.path.split(fl)
+							f_file = []
+							time = self.formatTime(folder)
+							f_file.append(time+' - '+file_name)
+							f_file.append(fl)
+							f_files.append(f_file)
+				else:
+					for folder in os.listdir(basedir):
+						print(folder)
+						match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
+						if match is not None:
+							folder_name, file_name = os.path.split(filename)
+							f_file = []
+							f_file.append(folder)
+							f_files.append(f_file)
+			elif (backup_per_time == 'file'):
+				f_files = []
+				if (time_folder is not False):
+					tm_folders = self.getData(False)
+					tm_folder = tm_folders[time_folder][0]
+					path, flname = os.path.split(filename)
+					basedir = basedir+'/'+tm_folder+'/'+path
+					(filepart, extpart) = os.path.splitext(flname)
+					for folder in os.listdir(basedir):
+						fl = basedir+'/'+folder
+						match = re.search(r"^"+re.escape(filepart)+"_([0-9+]{6})"+re.escape(extpart)+"$", folder)
+
+						if os.path.isfile(fl) and match is not None:
+							time = self.formatTime(match.group(1))
+							f_file = []
+							f_file.append(time+' - '+flname)
+							f_file.append(fl)
+							f_files.append(f_file)
+				else:
+					for folder in os.listdir(basedir):
+						match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
+						if match is not None:
+							folder_name, file_name = os.path.split(filename)
+							f_file = []
+							f_file.append(folder)
+							f_files.append(f_file)
+		else:
+			f_files = []
+			for folder in os.listdir(basedir):
+				fl = basedir+'/'+folder+'/'+filename
+				match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
+				if os.path.isfile(fl) and match is not None:
+					folder_name, file_name = os.path.split(fl)
+					f_file = []
+					f_file.append(folder+' - '+file_name)
+					f_file.append(fl)
+					f_files.append(f_file)
+		f_files.reverse()
+		self.datalist = f_files
 		return f_files
 
-	def open(self, file):
-		if (file == -1):
+
+
+	def timeFolders(self, parent):
+		if (parent == -1):
 			return
+
+
 		# open file
-		f_files = self.getFiles()
+		f_files = self.getData(parent)
+		#print(f_files)
+
+		sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 10)
+		return
+
+
 		filename = f_files[file][1]
 		window = sublime.active_window()
-		view = sublime.Window.active_view(window)
-		window.open_file(filename)
+		window.open_file(filename, sublime.TRANSIENT)
+		#view = sublime.Window.active_view(window)
+		#view.set_read_only(True)
+
+
+	def openFile(self, file):
+		if (file == -1):
+			return
+
+		f_files = self.datalist
+		filename = f_files[file][1]
+
+		window = sublime.active_window()
+		view = window.open_file(filename)
+		#view.set_read_only(True)
+		self.view.set_read_only(True)
+		self.view.set_status('toggle_readonly', 'Readonly')
+
+	def formatTime(self, time):
+		time = time[0:2]+':'+time[2:4]+':'+time[4:6]
+		return time
+
 

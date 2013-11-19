@@ -1,1 +1,1 @@
-{"url": "https://github.com/akalongman/sublimetext-autobackups", "version": "1.2", "description": "AutoBackups is a Sublime Text 2/3 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver)"}
+{"description": "Sublime Text 2/3 Auto backups plugin", "url": "https://github.com/akalongman/sublimetext-autobackups", "version": "1.5.1"}
