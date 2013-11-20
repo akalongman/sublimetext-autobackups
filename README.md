@@ -12,7 +12,7 @@ When you edit text files (scripts, prose, whatever) you often find yourself wish
 
 To change plugin configuration, access the plugin's settings in `Preferences->Package Settings->AutoBackups`.
 
-Language specific options:
+Configuration options:
 ```js
 	{
 		// The directory where we'll keep our backups. If empty, we'll try to put them in
