@@ -268,9 +268,8 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 
 		window = sublime.active_window()
 		view = window.open_file(filename)
-		#view.set_read_only(True)
-		self.view.set_read_only(True)
-		self.view.set_status('toggle_readonly', 'Readonly')
+		view.set_read_only(True)
+		view.set_status('toggle_readonly', 'Readonly')
 
 	def formatTime(self, time):
 		time = time[0:2]+':'+time[2:4]+':'+time[4:6]
