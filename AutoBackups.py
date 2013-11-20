@@ -167,14 +167,25 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 							f_file.append(fl)
 							f_files.append(f_file)
 				else:
+					path, flname = os.path.split(filename)
+					(filepart, extpart) = os.path.splitext(flname)
 					for folder in os.listdir(basedir):
-						print(folder)
 						match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
 						if match is not None:
 							folder_name, file_name = os.path.split(filename)
 							f_file = []
-							f_file.append(folder)
-							f_files.append(f_file)
+							basedir2 = basedir+'/'+folder
+							count = 0
+							for folder2 in os.listdir(basedir2):
+								match = re.search(r"^[0-9+]{6}$", folder2)
+								if match is not None:
+									basedir3 = basedir+'/'+folder+'/'+folder2+'/'+filename
+									if os.path.isfile(basedir3):
+										count += 1
+							if (count > 0):
+								f_file.append(folder)
+								f_file.append('Backups: '+str(count))
+								f_files.append(f_file)
 			elif (backup_per_time == 'file'):
 				f_files = []
 				if (time_folder is not False):
@@ -194,13 +205,24 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 							f_file.append(fl)
 							f_files.append(f_file)
 				else:
+					path, flname = os.path.split(filename)
+					(filepart, extpart) = os.path.splitext(flname)
 					for folder in os.listdir(basedir):
 						match = re.search(r"^[0-9+]{4}-[0-9+]{2}-[0-9+]{2}$", folder)
 						if match is not None:
 							folder_name, file_name = os.path.split(filename)
 							f_file = []
-							f_file.append(folder)
-							f_files.append(f_file)
+							basedir2 = basedir+'/'+folder+'/'+path
+							count = 0
+							if (os.path.isdir(basedir2)):
+								for sfile in os.listdir(basedir2):
+									match = re.search(r"^"+re.escape(filepart)+"_([0-9+]{6})"+re.escape(extpart)+"$", sfile)
+									if match is not None:
+										count += 1
+							if (count > 0):
+								f_file.append(folder)
+								f_file.append('Backups: '+str(count))
+								f_files.append(f_file)
 		else:
 			f_files = []
 			for folder in os.listdir(basedir):
@@ -225,7 +247,6 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 
 		# open file
 		f_files = self.getData(parent)
-		#print(f_files)
 
 		sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 10)
 		return

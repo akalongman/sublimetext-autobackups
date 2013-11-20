@@ -23,7 +23,7 @@ class PathsHelper(object):
 
 		time = now_date[11:19].replace(':', '')
 		backup_per_time =  settings.get('backup_per_time')
-		if (backup_per_time == 'folder' and not only_base):
+		if (backup_per_day and backup_per_time == 'folder' and not only_base):
 			backup_dir = backup_dir +'/'+ time
 
 		if backup_dir != '':
@@ -47,8 +47,9 @@ class PathsHelper(object):
 		(filepart, extensionpart) = os.path.splitext(filename)
 		platform = sublime.platform().title()
 		settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+		backup_per_day =  settings.get('backup_per_day')
 		backup_per_time =  settings.get('backup_per_time')
-		if (backup_per_time == 'file'):
+		if (backup_per_day and backup_per_time == 'file'):
 			now_date = str(datetime.datetime.now())
 			time = now_date[11:19].replace(':', '')
 			name = '%s_%s%s' % (filepart, time, extensionpart,)
