@@ -6,6 +6,7 @@ import sys
 import os
 import shutil
 import re
+import hashlib
 
 st_version = 2
 if sublime.version() == '' or int(sublime.version()) > 3000:
@@ -33,11 +34,9 @@ except (ImportError):
 cprint = globals()["__builtins__"]["print"]
 
 class AutoBackupsEventListener(sublime_plugin.EventListener):
-
-	def getSettings(self):
-		platform = sublime.platform().title()
-		settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
-		return settings
+	hashes = {}
+	platform = sublime.platform().title()
+	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
 
 
 	def on_post_save(self, view):
@@ -48,22 +47,25 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 	def on_load(self, view):
 		if (st_version == 3):
 			return
-		settings = self.getSettings()
-		if settings.get('backup_on_open_file'):
+
+		if self.settings.get('backup_on_open_file'):
 			self.save_backup(view, 1)
+
 
 	def on_post_save_async(self, view):
 		self.save_backup(view, 0)
 
+
 	def on_load_async(self, view):
-		settings = self.getSettings()
-		if settings.get('backup_on_open_file'):
+		if self.settings.get('backup_on_open_file'):
 			self.save_backup(view, 1)
 
+
 	def save_backup(self, view, on_load_event):
-		settings = self.getSettings()
+		view_size = view.size()
+
 		# don't save files above configured size
-		if view.size() > settings.get('max_backup_file_size_bytes'):
+		if view_size > self.settings.get('max_backup_file_size_bytes'):
 			self.console('Backup not saved, file too large (%d bytes)' % view.size())
 			return
 
@@ -71,8 +73,24 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 		newname = PathsHelper.get_backup_filepath(filename)
 		if newname == None:
 			return
-		# not create file backup if current file is backup
 
+		buffer_id = view.buffer_id()
+		content = filename+view.substr(sublime.Region(0, view_size))
+		content = self.encode(content)
+		current_hash = hashlib.md5(content).hexdigest()
+
+		last_hash = ''
+		try:
+			last_hash = self.hashes[buffer_id]
+		except Exception as e:
+			last_hash = ''
+
+
+		# not create file backup if no changes from last backup
+		if (last_hash == current_hash):
+			return
+
+		# not create file backup if current file is backup
 		if on_load_event & self.is_backup_file(filename):
 			return
 
@@ -87,11 +105,11 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 		shutil.copy(filename, newname)
 
+		self.hashes[buffer_id] = current_hash
 		self.console('Backup saved to: '+newname.replace('\\', '/'))
 
 	def is_backup_file(self, path):
-		settings = self.getSettings()
-		backup_per_time = settings.get('backup_per_time')
+		backup_per_time = self.settings.get('backup_per_time')
 		path = PathsHelper.normalise_path(path)
 		base_dir = PathsHelper.get_base_dir(False)
 		base_dir = PathsHelper.normalise_path(base_dir)
@@ -108,6 +126,20 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 	def console(self, text):
 		cprint(text)
+
+	def fileChanged(self, text):
+		return
+
+	def encode(self, text):
+		if (st_version == 2):
+			if isinstance(text, unicode):
+				text = text.encode('UTF-8')
+		elif (st_version == 3):
+			if isinstance(text, str):
+				text = text.encode('UTF-8')
+		return text
+
+
 
 
 class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):

@@ -25,7 +25,7 @@ Configuration options:
 		// If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23/myfile.php
 		"backup_per_day": true,
 
-		// If set, backups saved per second. possible values: false, "folder" or "file"
+		// If set, backups saved per second. NOTE: backup will be saved, if file modified. possible values: false, "folder" or "file"
 		// false - disabled backup per second
 		// "folder" - backup example D:/Sublime Text Backups/2013-05-23/095034/myfile.php
 		// "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
