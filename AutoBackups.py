@@ -208,15 +208,17 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 							f_file = []
 							basedir2 = basedir+'/'+folder
 							count = 0
+							last = ''
 							for folder2 in os.listdir(basedir2):
 								match = re.search(r"^[0-9+]{6}$", folder2)
 								if match is not None:
 									basedir3 = basedir+'/'+folder+'/'+folder2+'/'+filename
 									if os.path.isfile(basedir3):
 										count += 1
+										last = folder2
 							if (count > 0):
 								f_file.append(folder)
-								f_file.append('Backups: '+str(count))
+								f_file.append('Backups: '+str(count)+', Last edit: '+self.formatTime(last))
 								f_files.append(f_file)
 			elif (backup_per_time == 'file'):
 				f_files = []
@@ -246,14 +248,16 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 							f_file = []
 							basedir2 = basedir+'/'+folder+'/'+path
 							count = 0
+							last = ''
 							if (os.path.isdir(basedir2)):
 								for sfile in os.listdir(basedir2):
 									match = re.search(r"^"+re.escape(filepart)+"_([0-9+]{6})"+re.escape(extpart)+"$", sfile)
 									if match is not None:
 										count += 1
+										last = match.group(1)
 							if (count > 0):
 								f_file.append(folder)
-								f_file.append('Backups: '+str(count))
+								f_file.append('Backups: '+str(count)+', Last edit: '+self.formatTime(last))
 								f_files.append(f_file)
 		else:
 			f_files = []
