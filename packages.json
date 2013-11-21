@@ -6,12 +6,12 @@
 			"description": "AutoBackups is a Sublime Text 2/3 plugin, which automatically save a backup copy every time you save or open (if backup file not exists) a file. (Like DreamWeaver)",
 			"author": "Avtandil Kikabidze",
 			"homepage": "https://github.com/akalongman/sublimetext-autobackups",
-			"last_modified": "2013-06-06 11:48",
+			"last_modified": "2013-11-21 15:32",
 			"platforms": {
 				"*": [
 					{
-						"version": "1.5.1",
-						"url": "https://nodeload.github.com/akalongman/sublimetext-autobackups/zip/1.5.1"
+						"version": "2.0.0",
+						"url": "https://nodeload.github.com/akalongman/sublimetext-autobackups/zip/2.0.0"
 					}
 				]
 			}
