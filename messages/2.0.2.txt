@@ -1,0 +1,7 @@
+Sublime AutoBackups 2.0.2 Changelog:
+
+New Features
+------------
+- Added backup per save feature (Enabled in default, you can disable this feature in plugin settings)
+- Added option for per save backup filesystem structure, "folder" or "file"
+- Added feature, if file not changed after last backup (in same work session), new backup not created. You can push ctrl+s every second, backup not will be created if file not changed :)
