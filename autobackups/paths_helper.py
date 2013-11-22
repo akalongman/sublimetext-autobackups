@@ -66,6 +66,8 @@ class PathsHelper(object):
 
 	@staticmethod
 	def normalise_path(path, slashes = False):
+		if (path is None):
+			return ''
 
 		if sublime.platform() != 'windows':
 			# remove any leading / before combining with backup_base
