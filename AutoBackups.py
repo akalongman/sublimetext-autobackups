@@ -63,12 +63,13 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 	def save_backup(self, view, on_load_event):
 		view_size = view.size()
-		if (view_size is None):
+		max_backup_file_size = self.settings.get('max_backup_file_size_bytes')
+		if (view_size is None or max_backup_file_size is None):
 			self.console('Size of view not available')
 			return
 
 		# don't save files above configured size
-		if view_size > self.settings.get('max_backup_file_size_bytes'):
+		if view_size > max_backup_file_size:
 			self.console('Backup not saved, file too large (%d bytes)' % view.size())
 			return
 
