@@ -22,6 +22,7 @@ if reloader_name in sys.modules:
 	reload(sys.modules[reloader_name])
 
 
+
 try:
 	# Python 3
 	from AutoBackups.autobackups import reloader
@@ -33,11 +34,23 @@ except (ImportError):
 
 cprint = globals()["__builtins__"]["print"]
 
-class AutoBackupsEventListener(sublime_plugin.EventListener):
+
+
+def plugin_loaded():
+	global settings
+	global hashes
 	hashes = {}
 	platform = sublime.platform().title()
 	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+	print('Plugin AutoBackups Initialized')
 
+
+if st_version == 2:
+	plugin_loaded()
+
+
+
+class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 	def on_post_save(self, view):
 		if (st_version == 3):
@@ -48,7 +61,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 		if (st_version == 3):
 			return
 
-		if self.settings.get('backup_on_open_file'):
+		if settings.get('backup_on_open_file'):
 			self.save_backup(view, 1)
 
 
@@ -57,13 +70,13 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 
 	def on_load_async(self, view):
-		if self.settings.get('backup_on_open_file'):
+		if settings.get('backup_on_open_file'):
 			self.save_backup(view, 1)
 
 
 	def save_backup(self, view, on_load_event):
 		view_size = view.size()
-		max_backup_file_size = self.settings.get('max_backup_file_size_bytes')
+		max_backup_file_size = settings.get('max_backup_file_size_bytes')
 		if (view_size is None):
 			self.console('Size of view not available')
 			return
@@ -71,6 +84,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 		if (max_backup_file_size is None):
 			self.console('Max allowed size from config not available')
 			return
+
 
 
 		# don't save files above configured size
@@ -90,7 +104,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 		last_hash = ''
 		try:
-			last_hash = self.hashes[buffer_id]
+			last_hash = hashes[buffer_id]
 		except Exception as e:
 			last_hash = ''
 
@@ -114,11 +128,11 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 		shutil.copy(filename, newname)
 
-		self.hashes[buffer_id] = current_hash
+		hashes[buffer_id] = current_hash
 		self.console('Backup saved to: '+newname.replace('\\', '/'))
 
 	def is_backup_file(self, path):
-		backup_per_time = self.settings.get('backup_per_time')
+		backup_per_time = settings.get('backup_per_time')
 		path = PathsHelper.normalise_path(path)
 		base_dir = PathsHelper.get_base_dir(False)
 		base_dir = PathsHelper.normalise_path(base_dir)
@@ -152,12 +166,10 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 
 class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
-	platform = sublime.platform().title()
-	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
 	datalist = []
 
 	def run(self, edit):
-		backup_per_day = self.settings.get('backup_per_day')
+		backup_per_day = settings.get('backup_per_day')
 
 		if (not backup_per_day):
 			window = sublime.active_window()
@@ -175,7 +187,7 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 				sublime.error_message('Backups for this file not exists!')
 				return
 
-			backup_per_time = self.settings.get('backup_per_time')
+			backup_per_time = settings.get('backup_per_time')
 			if (backup_per_time):
 				self.view.window().show_quick_panel(f_files, self.timeFolders)
 			else:
@@ -189,7 +201,7 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 		filename = PathsHelper.normalise_path(self.view.file_name(), True)
 		basedir = PathsHelper.get_base_dir(True)
 
-		backup_per_time = self.settings.get('backup_per_time')
+		backup_per_time = settings.get('backup_per_time')
 		if (backup_per_time):
 			if (backup_per_time == 'folder'):
 				f_files = []
