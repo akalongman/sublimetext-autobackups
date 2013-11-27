@@ -1,0 +1,11 @@
+Sublime AutoBackups 2.1.0 Changelog:
+
+If you have old version of AutoBackups in folder Installed Packages, you must manually remove first. Example, you must remove:
+
+	ST2: %APPDATA%/Sublime Text 2/Installed Packages/AutoBackups.sublime-package
+	ST3: %APPDATA%/Sublime Text 3/Installed Packages/AutoBackups.sublime-package
+
+
+Bug Fixes
+------------
+- Fixed bugs with configuration
