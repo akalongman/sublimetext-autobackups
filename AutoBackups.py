@@ -41,7 +41,7 @@ def plugin_loaded():
 	global hashes
 	hashes = {}
 	platform = sublime.platform().title()
-	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+	settings = sublime.load_settings('AutoBackups.sublime-settings')
 	print('Plugin AutoBackups Initialized')
 
 
