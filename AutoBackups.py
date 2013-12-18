@@ -32,6 +32,7 @@ except (ImportError):
 	import autobackups.reloader
 	from autobackups.paths_helper import PathsHelper
 
+# fix for ST2
 cprint = globals()["__builtins__"]["print"]
 
 
@@ -41,8 +42,10 @@ def plugin_loaded():
 	global hashes
 	hashes = {}
 	platform = sublime.platform().title()
-	settings = sublime.load_settings('AutoBackups.sublime-settings')
-	print('Plugin AutoBackups Initialized')
+	if (platform == "Osx"):
+		platform = "OSX"
+	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+	cprint('AutoBackups: Plugin Initialized')
 
 
 if st_version == 2:
