@@ -49,7 +49,7 @@ Once you install Package Control, restart Sublime Text and bring up the Command 
 
 **With Git:** Clone the repository in your Sublime Text "Packages" directory:
 
-    git clone https://github.com/akalongman/sublimetext-autobackups.git
+    git clone https://github.com/akalongman/sublimetext-autobackups.git AutoBackups
 
 
 The "Packages" directory is located at:
