@@ -1,3 +1,8 @@
+# @author 		Avtandil Kikabidze
+# @copyright 		Copyright (c) 2008-2014, Avtandil Kikabidze aka LONGMAN (akalongman@gmail.com)
+# @link 			http://long.ge
+# @license 		GNU General Public License version 2 or later;
+
 import sublime
 import sys
 from imp import reload
@@ -14,8 +19,7 @@ mod_prefix = 'AutoBackups.autobackups'
 mods_load_order = [
     '',
 
-    '.paths_helper',
-    '.win_helper'
+    '.paths_helper'
 ]
 
 for suffix in mods_load_order:

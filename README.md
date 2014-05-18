@@ -44,7 +44,7 @@ Configuration options:
 		// If true, backup file opened in same line as cursor in original file
 		"open_in_same_line": true,
 
-		// If true, show backup previews
+		// If true, show backup previews (only in ST3)
 		"show_previews": true
 	}
 ```

@@ -1,5 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# @author 		Avtandil Kikabidze
+# @copyright 		Copyright (c) 2008-2014, Avtandil Kikabidze aka LONGMAN (akalongman@gmail.com)
+# @link 			http://long.ge
+# @license 		GNU General Public License version 2 or later;
+
 import sublime
 import sublime_plugin
 import sys
@@ -23,6 +26,9 @@ if st_version == 3:
 if reloader_name in sys.modules:
 	reload(sys.modules[reloader_name])
 
+# fix for ST2
+cprint = globals()["__builtins__"]["print"]
+
 
 
 try:
@@ -34,30 +40,34 @@ except (ImportError):
 	import autobackups.reloader
 	from autobackups.paths_helper import PathsHelper
 
-# fix for ST2
-cprint = globals()["__builtins__"]["print"]
-
-
 
 def plugin_loaded():
 	global settings
 	global hashes
 	hashes = {}
 	platform = sublime.platform().title()
+
 	if (platform == "Osx"):
 		platform = "OSX"
 	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
+
+	backup_dir = settings.get('backup_dir')
+	backup_per_day = settings.get('backup_per_day')
+	backup_per_time = settings.get('backup_per_time')
+
+	PathsHelper.initialize(platform, backup_dir, backup_per_day, backup_per_time)
 	cprint('AutoBackups: Plugin Initialized')
 	sublime.set_timeout(gc, 10000)
 
-if st_version == 2:
-	plugin_loaded()
+
 
 
 
 def gc():
-	thread = AutoBackupsGcBackup()
-	thread.start()
+	backup_time = settings.get('delete_old_backups', 0)
+	if (backup_time > 0):
+		thread = AutoBackupsGcBackup(backup_time)
+		thread.start()
 
 
 class AutoBackupsEventListener(sublime_plugin.EventListener):
@@ -332,8 +342,10 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 
 		# open file
 		f_files = self.getData(parent)
-
-		sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile, 0, 0, self.showFile), 10)
+		if (st_version == 3):
+			sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile, 0, 0, self.showFile), 10)
+		else:
+			sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 10)
 
 		return
 
@@ -369,14 +381,17 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 
 
 class AutoBackupsGcBackup(threading.Thread):
-	def __init__(self):
+	backup_time = 0
+
+	def __init__(self, back_time):
+		self.backup_time = back_time
 		threading.Thread.__init__(self)
 
 
 	def run(self):
 		import datetime
 		basedir = PathsHelper.get_base_dir(True)
-		backup_time = settings.get('delete_old_backups', 0)
+		backup_time = self.backup_time
 
 		if (backup_time < 1):
 			return
@@ -411,3 +426,9 @@ class AutoBackupsGcBackup(threading.Thread):
 	        func(path)
 	    else:
 	        raise
+
+
+
+
+if st_version == 2:
+	plugin_loaded()
