@@ -20,6 +20,16 @@
 	"backup_per_time": "file",
 
 	// Files larger than this many bytes won't be backed up.
-	"max_backup_file_size_bytes": 262144 // = 256 KB
+	"max_backup_file_size_bytes": 262144, // = 256 KB
+
+	// Files older than X days will be deleted. If 0 - auto delete disabled
+	"delete_old_backups": 0, // days to delete
+
+	// If true, backup file opened in same line as cursor in original file
+	"open_in_same_line": true,
+
+	// If true, show backup previews
+	"show_previews": true
+
 
 }

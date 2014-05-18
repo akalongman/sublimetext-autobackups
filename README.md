@@ -15,6 +15,9 @@ To change plugin configuration, access the plugin's settings in `Preferences->Pa
 Configuration options:
 ```js
 	{
+		// Don't make changes to this file directly as they can get wiped out when the
+		// plugin is updated. Instead transfer what you need to the 'Settings - User' file.
+
 		// The directory where we'll keep our backups. If empty, we'll try to put them in
 		// D:/Sublime Text Backups
 		"backup_dir": "D:/Sublime Text Backups",
@@ -25,7 +28,7 @@ Configuration options:
 		// If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23/myfile.php
 		"backup_per_day": true,
 
-		// If set, backups saved per second. NOTE: backup will be saved, if file modified after last backup. possible values: false, "folder" or "file"
+		// If set, backups saved per second. possible values: false, "folder" or "file"
 		// false - disabled backup per second
 		// "folder" - backup example D:/Sublime Text Backups/2013-05-23/095034/myfile.php
 		// "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
@@ -33,7 +36,16 @@ Configuration options:
 		"backup_per_time": "file",
 
 		// Files larger than this many bytes won't be backed up.
-		"max_backup_file_size_bytes": 262144 // = 256 KB
+		"max_backup_file_size_bytes": 262144, // = 256 KB
+
+		// Files older than X days will be deleted. If 0 - auto delete disabled
+		"delete_old_backups": 0, // days to delete
+
+		// If true, backup file opened in same line as cursor in original file
+		"open_in_same_line": true,
+
+		// If true, show backup previews
+		"show_previews": true
 	}
 ```
 
@@ -77,7 +89,7 @@ To see if plugin working, open the console with the `View->Show Console` menu it
 
 ## Backup size considerations
 
-To prevent your backup folder from growing too large, check out the `max_backup_file_size_bytes` setting in `Preferences->Package Settings->AutoBackups`.
+To prevent your backup folder from growing too large, check out the `max_backup_file_size_bytes` and `delete_old_backups` setting in `Preferences->Package Settings->AutoBackups`.
 
 ## Keybindings
 
@@ -88,11 +100,8 @@ To open current file backup, use cmd+alt+b keybinding, or in quick panel type Au
 
 This code is available on [Github][0]. Pull requests are welcome.
 
-Created by [Avtandil Kikabidze][3].
-
-Originally Automatic Backups plugin authored by [Joel Thornton][2].
+Created by [Avtandil Kikabidze][2].
 
  [0]: https://github.com/akalongman/sublimetext-autobackups
  [1]: http://wbond.net/sublime_packages/package_control
- [2]: https://github.com/joelpt/sublimetext-automatic-backups
- [3]: mailto:akalongman@gmail.com
+ [2]: mailto:akalongman@gmail.com

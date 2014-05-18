@@ -7,6 +7,8 @@ import os
 import shutil
 import re
 import hashlib
+import time
+import threading
 
 st_version = 2
 if sublime.version() == '' or int(sublime.version()) > 3000:
@@ -46,11 +48,16 @@ def plugin_loaded():
 		platform = "OSX"
 	settings = sublime.load_settings('AutoBackups ('+platform+').sublime-settings')
 	cprint('AutoBackups: Plugin Initialized')
-
+	sublime.set_timeout(gc, 10000)
 
 if st_version == 2:
 	plugin_loaded()
 
+
+
+def gc():
+	thread = AutoBackupsGcBackup()
+	thread.start()
 
 
 class AutoBackupsEventListener(sublime_plugin.EventListener):
@@ -89,13 +96,15 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 			return
 
 
-
 		# don't save files above configured size
 		if view_size > max_backup_file_size:
 			self.console('Backup not saved, file too large (%d bytes)' % view.size())
 			return
 
 		filename = view.file_name()
+		if filename == None:
+			return
+
 		newname = PathsHelper.get_backup_filepath(filename)
 		if newname == None:
 			return
@@ -170,13 +179,22 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 	datalist = []
+	curline = 1
+	lastopened = ""
 
 	def run(self, edit):
 		backup_per_day = settings.get('backup_per_day')
 
+		window = sublime.active_window()
+		view = sublime.Window.active_view(window)
+
+		open_in_same_line = settings.get('open_in_same_line', True)
+		if (open_in_same_line):
+			(row,col) = view.rowcol(view.sel()[0].begin())
+			self.curline = row + 1
+
+
 		if (not backup_per_day):
-			window = sublime.active_window()
-			view = sublime.Window.active_view(window)
 			filepath = view.file_name()
 			newname = PathsHelper.get_backup_filepath(filepath)
 			if os.path.isfile(newname):
@@ -212,6 +230,10 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 					tm_folders = self.getData(False)
 					tm_folder = tm_folders[time_folder][0]
 					basedir = basedir+'/'+tm_folder
+
+					if (not os.path.isdir(basedir)):
+						sublime.error_message('Folder ' + basedir + ' not found!')
+
 					for folder in os.listdir(basedir):
 						fl = basedir+'/'+folder+'/'+filename
 						match = re.search(r"^[0-9+]{6}$", folder)
@@ -252,6 +274,10 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 					path, flname = os.path.split(filename)
 					basedir = basedir+'/'+tm_folder+'/'+path
 					(filepart, extpart) = os.path.splitext(flname)
+
+					if (not os.path.isdir(basedir)):
+						sublime.error_message('Folder ' + basedir + ' not found!')
+
 					for folder in os.listdir(basedir):
 						fl = basedir+'/'+folder
 						match = re.search(r"^"+re.escape(filepart)+"_([0-9+]{6})"+re.escape(extpart)+"$", folder)
@@ -304,19 +330,26 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 		if (parent == -1):
 			return
 
-
 		# open file
 		f_files = self.getData(parent)
 
-		sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 10)
+		sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile, 0, 0, self.showFile), 10)
+
 		return
 
+	def showFile(self, file):
+		show_previews = settings.get('show_previews', True)
+		if (not show_previews):
+			return
 
+		if (file == -1):
+			return
+
+		f_files = self.datalist
 		filename = f_files[file][1]
+		print(filename)
 		window = sublime.active_window()
-		window.open_file(filename, sublime.TRANSIENT)
-		#view = sublime.Window.active_view(window)
-		#view.set_read_only(True)
+		window.open_file(filename+":"+str(self.curline), sublime.TRANSIENT | sublime.ENCODED_POSITION)
 
 
 	def openFile(self, file):
@@ -327,7 +360,7 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 		filename = f_files[file][1]
 
 		window = sublime.active_window()
-		view = window.open_file(filename)
+		view = window.open_file(filename+":"+str(self.curline), sublime.ENCODED_POSITION)
 		view.set_read_only(True)
 
 	def formatTime(self, time):
@@ -335,3 +368,46 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 		return time
 
 
+class AutoBackupsGcBackup(threading.Thread):
+	def __init__(self):
+		threading.Thread.__init__(self)
+
+
+	def run(self):
+		import datetime
+		basedir = PathsHelper.get_base_dir(True)
+		backup_time = settings.get('delete_old_backups', 0)
+
+		if (backup_time < 1):
+			return
+
+		diff = (backup_time + 1) * 24 * 3600
+		deleted = 0
+		now_time = time.time()
+		for folder in os.listdir(basedir):
+			match = re.search(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", folder)
+			if match is not None:
+				folder_time = time.mktime(datetime.datetime.strptime(folder, "%Y-%m-%d").timetuple())
+				if (now_time - folder_time > diff):
+					fldr = basedir+'/'+folder
+					try:
+						shutil.rmtree(fldr, onerror=self.onerror)
+						deleted = deleted + 1
+					except Exception as e:
+						cprint(e)
+
+		if (deleted > 0):
+			diff = backup_time * 24 * 3600
+			dt = now_time - diff
+			date = datetime.datetime.fromtimestamp(dt).strftime('%Y-%m-%d')
+			cprint('AutoBackups: Deleted '+str(deleted)+' backup folders older than '+date)
+
+
+	def onerror(self, func, path, exc_info):
+	    import stat
+	    if not os.access(path, os.W_OK):
+	        # Is the error an access error ?
+	        os.chmod(path, stat.S_IWUSR)
+	        func(path)
+	    else:
+	        raise
