@@ -1,0 +1,12 @@
+Sublime AutoBackups 2.3.2 Changelog:
+
+
+Bug-fixes
+------------
+- Fixed bugs
+
+Features
+------------
+- Added delete_old_backups settings
+- Added open_in_same_line setting
+- Added show_previews setting

@@ -44,6 +44,7 @@ except (ImportError):
 def plugin_loaded():
 	global settings
 	global hashes
+
 	hashes = {}
 	platform = sublime.platform().title()
 
@@ -95,6 +96,10 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 
 	def save_backup(self, view, on_load_event):
+
+		if (view.is_read_only()):
+			return
+
 		view_size = view.size()
 		max_backup_file_size = settings.get('max_backup_file_size_bytes')
 		if (view_size is None):
@@ -111,9 +116,15 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 			self.console('Backup not saved, file too large (%d bytes)' % view.size())
 			return
 
+
 		filename = view.file_name()
 		if filename == None:
 			return
+
+		# not create file backup if current file is backup
+		if on_load_event & self.is_backup_file(filename):
+			return
+
 
 		newname = PathsHelper.get_backup_filepath(filename)
 		if newname == None:
@@ -133,10 +144,6 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 
 		# not create file backup if no changes from last backup
 		if (last_hash == current_hash):
-			return
-
-		# not create file backup if current file is backup
-		if on_load_event & self.is_backup_file(filename):
 			return
 
 		# not create file if exists
@@ -190,13 +197,12 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
 class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 	datalist = []
 	curline = 1
-	lastopened = ""
 
 	def run(self, edit):
 		backup_per_day = settings.get('backup_per_day')
 
-		window = sublime.active_window()
-		view = sublime.Window.active_view(window)
+		window = self.view.window()
+		view = self.view
 
 		open_in_same_line = settings.get('open_in_same_line', True)
 		if (open_in_same_line):
@@ -220,9 +226,9 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 
 			backup_per_time = settings.get('backup_per_time')
 			if (backup_per_time):
-				self.view.window().show_quick_panel(f_files, self.timeFolders)
+				window.show_quick_panel(f_files, self.timeFolders)
 			else:
-				self.view.window().show_quick_panel(f_files, self.openFile)
+				window.show_quick_panel(f_files, self.openFile)
 			return
 
 
@@ -343,41 +349,46 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 		# open file
 		f_files = self.getData(parent)
 		if (st_version == 3):
-			sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile, 0, 0, self.showFile), 10)
+			show_previews = settings.get('show_previews', True)
+			if (show_previews):
+				sublime.set_timeout_async(lambda: self.view.window().show_quick_panel(f_files, self.openFile, on_highlight=self.showFile), 100)
+			else:
+				sublime.set_timeout_async(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 100)
 		else:
-			sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 10)
+			sublime.set_timeout(lambda: self.view.window().show_quick_panel(f_files, self.openFile), 100)
 
 		return
 
 	def showFile(self, file):
-		show_previews = settings.get('show_previews', True)
-		if (not show_previews):
-			return
-
 		if (file == -1):
 			return
 
 		f_files = self.datalist
 		filename = f_files[file][1]
-		print(filename)
-		window = sublime.active_window()
-		window.open_file(filename+":"+str(self.curline), sublime.TRANSIENT | sublime.ENCODED_POSITION)
+		window = self.view.window()
+
+		view = window.open_file(filename+":"+str(self.curline), sublime.ENCODED_POSITION | sublime.TRANSIENT)
+		view.set_read_only(True)
 
 
 	def openFile(self, file):
 		if (file == -1):
+			window = sublime.active_window()
+			window.focus_view(self.view)
 			return
 
 		f_files = self.datalist
 		filename = f_files[file][1]
 
-		window = sublime.active_window()
+		window = self.view.window()
 		view = window.open_file(filename+":"+str(self.curline), sublime.ENCODED_POSITION)
 		view.set_read_only(True)
+		window.focus_view(view)
 
 	def formatTime(self, time):
 		time = time[0:2]+':'+time[2:4]+':'+time[4:6]
 		return time
+
 
 
 class AutoBackupsGcBackup(threading.Thread):
