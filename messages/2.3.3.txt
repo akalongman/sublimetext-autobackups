@@ -1,0 +1,11 @@
+Sublime AutoBackups 2.3.3 Changelog:
+
+
+Bug-fixes
+------------
+- Fixed bugs
+
+Features
+------------
+- Added ignore_regexes setting
+- Added Donate menu item in Preferences - Package Settings - AutoBackups

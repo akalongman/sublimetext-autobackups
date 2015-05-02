@@ -45,6 +45,12 @@
                                 "args": {"file": "${packages}/User/AutoBackups (OSX).sublime-settings", "platform": "OSX"},
                                 "caption": "Settings – User"
                             },
+                            { "caption": "-", "id": "autobackups-donate-separator" },
+                            {
+                                "command": "auto_backups_donate",
+                                "args": {},
+                                "caption": "Donate"
+                            },
                             { "caption": "-" }
                         ]
                     }
