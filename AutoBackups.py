@@ -359,10 +359,10 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
 					f_file.append(folder+' - '+file_name)
 					f_file.append(fl)
 					f_files.append(f_file)
+		f_files.sort(key=lambda x: x[0])
 		f_files.reverse()
 		self.datalist = f_files
 		return f_files
-
 
 
 	def timeFolders(self, parent):
