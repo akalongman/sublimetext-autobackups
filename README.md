@@ -14,7 +14,7 @@ No sponsors yet.. :(
 
 If you like the software, don't forget to donate to further development of it!
 
-[![PayPal donate button](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=akalongman@gmail.com&item_name=Donation to Project&item_number=1&no_shipping=1 "Donate once-off to this project using Paypal")
+[![PayPal donate button](https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=akalongman@gmail.com&item_name=Donation to Project&item_number=1&no_shipping=1 "Donate to this project using Paypal")
 
 
 ### Configuration
