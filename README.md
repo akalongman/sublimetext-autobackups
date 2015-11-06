@@ -14,7 +14,7 @@ No sponsors yet.. :(
 
 If you like the software, don't forget to donate to further development of it!
 
-[![PayPal donate button](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MVCBM7M2RCEX6&lc=US&item_name=Support%20our%20open%2dsource%20initiatives&item_number=donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted "Donate once-off to this project using Paypal")
+[![PayPal donate button](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=akalongman@gmail.com&item_name=Donation to Project&item_number=1&no_shipping=1 "Donate once-off to this project using Paypal")
 
 
 ### Configuration
@@ -113,12 +113,25 @@ To prevent your backup folder from growing too large, check out the `max_backup_
 To open current file backup, use cmd+alt+b keybinding, or in quick panel type AutoBackup: Open file backup
 
 
+## Contributing
+
+Anyone and everyone is welcome to contribute. Please take a moment to review the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines for information.
+
+
 ## Credits
+
+Credit list in [CREDITS](CREDITS)
 
 This code is available on [Github][0]. Pull requests are welcome.
 
 Created by [Avtandil Kikabidze][2].
 
+
+## License
+
+[MIT License](LICENSE)
+
+
  [0]: https://github.com/akalongman/sublimetext-autobackups
- [1]: http://wbond.net/sublime_packages/package_control
+ [1]: https://packagecontrol.io/installation
  [2]: mailto:akalongman@gmail.com
