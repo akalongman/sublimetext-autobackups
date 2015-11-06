@@ -1,7 +1,11 @@
-# @author 		Avtandil Kikabidze
-# @copyright 		Copyright (c) 2008-2014, Avtandil Kikabidze aka LONGMAN (akalongman@gmail.com)
-# @link 			http://long.ge
-# @license 		GNU General Public License version 2 or later;
+##
+# This file is part of the AutoBackups package.
+#
+# (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
+#
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+##
 
 import sublime
 import sys
