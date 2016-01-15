@@ -1,4 +1,0 @@
-Sublime AutoBackups 2.3.5 Changelog:
-
-
-- Fixed file not found exception

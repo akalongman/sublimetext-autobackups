@@ -1,0 +1,7 @@
+Sublime AutoBackups 2.3.7 Changelog:
+
+
+- Fixed file not found exception
+- Added command for opening backups folder
+
+
