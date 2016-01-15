@@ -167,7 +167,11 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         if os.access(backup_dir, os.F_OK) == False:
             os.makedirs(backup_dir)
 
-        shutil.copy(filename, newname)
+        try:
+            shutil.copy(filename, newname)
+        except FileNotFoundError:
+            self.console('Backup not saved. File '+filename+' not exists')
+            return False;
 
         hashes[buffer_id] = current_hash
         self.console('Backup saved to: '+newname.replace('\\', '/'))

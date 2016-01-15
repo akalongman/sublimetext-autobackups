@@ -1,4 +1,4 @@
-Sublime AutoBackups 2.3.3 Changelog:
+Sublime AutoBackups 2.3.4 Changelog:
 
 
 - Changed readme
