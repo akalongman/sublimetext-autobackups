@@ -108,17 +108,17 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         view_size = view.size()
         max_backup_file_size = settings.get('max_backup_file_size_bytes')
         if (view_size is None):
-            self.console('Size of view not available')
+            self.console('View size not available.')
             return
 
         if (max_backup_file_size is None):
-            self.console('Max allowed size from config not available')
+            self.console('Max size allowed by config not available.')
             return
 
 
         # don't save files above configured size
         if view_size > max_backup_file_size:
-            self.console('Backup not saved, file too large (%d bytes)' % view.size())
+            self.console('Backup not saved, file too large (%d bytes).' % view.size())
             return
 
 
@@ -170,7 +170,7 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         try:
             shutil.copy(filename, newname)
         except FileNotFoundError:
-            self.console('Backup not saved. File '+filename+' not exists')
+            self.console('Backup not saved. File '+filename+' does not exist!')
             return False;
 
         hashes[buffer_id] = current_hash
@@ -248,12 +248,12 @@ class AutoBackupsOpenBackupCommand(sublime_plugin.TextCommand):
             if os.path.isfile(newname):
                 window.open_file(newname)
             else:
-                sublime.error_message('Backup for ' + filepath + ' not exists!')
+                sublime.error_message('Backup for ' + filepath + ' does not exist!')
         else:
             f_files = self.getData(False)
 
             if not f_files:
-                sublime.error_message('Backups for this file not exists!')
+                sublime.error_message('Backups for this file do not exist!')
                 return
 
             backup_per_time = settings.get('backup_per_time')
