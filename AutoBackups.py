@@ -60,9 +60,14 @@ def plugin_loaded():
     backup_dir = settings.get('backup_dir')
     backup_per_day = settings.get('backup_per_day')
     backup_per_time = settings.get('backup_per_time')
+    backup_name_mode = settings.get('backup_name_mode')
 
-    PathsHelper.initialize(platform, backup_dir, backup_per_day, backup_per_time)
+    PathsHelper.initialize(platform, backup_dir, backup_per_day, backup_per_time, backup_name_mode)
     cprint('AutoBackups: Plugin Initialized')
+    cprint('With: backup_dir: {}\n\
+            backup_per_day: {}\n\
+            backup_per_time: {}\n\
+            backup_name_mode: {}'.format(backup_dir, backup_per_day, backup_per_time, backup_name_mode))
     sublime.set_timeout(gc, 10000)
 
 
@@ -131,8 +136,6 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
             #cprint("AutoBackups: " + filename + " is excluded");
             return
 
-
-
         # not create file backup if current file is backup
         if on_load_event & self.is_backup_file(filename):
             return
@@ -141,6 +144,8 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         newname = PathsHelper.get_backup_filepath(filename)
         if newname == None:
             return
+
+        self.console(newname)
 
         buffer_id = view.buffer_id()
         content = filename+view.substr(sublime.Region(0, view_size))

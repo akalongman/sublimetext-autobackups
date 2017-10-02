@@ -13,18 +13,24 @@ import re
 import sys
 import datetime
 
+
+backup_name_mode_text = 'auto-save'
+
 class PathsHelper(object):
     platform = False
     backup_dir = False
     backup_per_day = False
     backup_per_time = False
+    backup_name_mode = False
+
 
     @staticmethod
-    def initialize(pl, backup_dir, backup_per_day, backup_per_time):
+    def initialize(pl, backup_dir, backup_per_day, backup_per_time, backup_name_mode):
         PathsHelper.platform = pl
         PathsHelper.backup_dir = backup_dir
         PathsHelper.backup_per_day = backup_per_day
         PathsHelper.backup_per_time = backup_per_time
+        PathsHelper.backup_name_mode = backup_name_mode
 
 
     @staticmethod
@@ -60,8 +66,12 @@ class PathsHelper(object):
         return os.path.expanduser(backup_dir)
 
     @staticmethod
-    def timestamp_file(filename):
+    def create_name_file(filename):
         (filepart, extensionpart) = os.path.splitext(filename)
+
+        if PathsHelper.backup_name_mode not in (False, None, ) \
+          and PathsHelper.backup_name_mode.lower() == 'prefix':
+            filepart = '%s.%s' % (backup_name_mode_text, filepart)
 
         backup_per_day =  PathsHelper.backup_per_day
         backup_per_time =  PathsHelper.backup_per_time
@@ -71,6 +81,11 @@ class PathsHelper(object):
             name = '%s_%s%s' % (filepart, time, extensionpart,)
         else:
             name = '%s%s' % (filepart, extensionpart,)
+
+        (filepart, extensionpart) = os.path.splitext(name) 
+        if PathsHelper.backup_name_mode not in (False, None, ) \
+          and PathsHelper.backup_name_mode.lower() == 'suffix':
+            name = '%s.%s%s' % (filepart, backup_name_mode_text, extensionpart)
         return name
 
     @staticmethod
@@ -109,5 +124,5 @@ class PathsHelper(object):
     @staticmethod
     def get_backup_filepath(filepath):
         filename = os.path.split(filepath)[1]
-        return os.path.join(PathsHelper.get_backup_path(filepath), PathsHelper.timestamp_file(filename))
+        return os.path.join(PathsHelper.get_backup_path(filepath), PathsHelper.create_name_file(filename))
 
