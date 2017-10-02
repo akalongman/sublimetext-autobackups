@@ -21,6 +21,8 @@ class PathsHelper(object):
     backup_dir = False
     backup_per_day = False
     backup_per_time = False
+    backup_name_mode = False
+
 
     @staticmethod
     def initialize(pl, backup_dir, backup_per_day, backup_per_time, backup_name_mode):
