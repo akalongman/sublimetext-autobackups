@@ -145,6 +145,8 @@ class AutoBackupsEventListener(sublime_plugin.EventListener):
         if newname == None:
             return
 
+        self.console(newname)
+
         buffer_id = view.buffer_id()
         content = filename+view.substr(sublime.Region(0, view_size))
         content = self.encode(content)
