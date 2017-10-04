@@ -23,49 +23,48 @@ To change plugin configuration, access the plugin's settings in `Preferences->Pa
 
 Configuration options:
 ```js
-	{
-		// Don't make changes to this file directly as they can get wiped out when the
-		// plugin is updated. Instead transfer what you need to the 'Settings - User' file.
+{
+  // Don't make changes to this file directly as they can get wiped out when the
+  // plugin is updated. Instead transfer what you need to the 'Settings - User' file.
 
-		// The directory where we'll keep our backups. If empty, we'll try to put them in
-		// D:/Sublime Text Backups
-		"backup_dir": "D:/Sublime Text Backups",
+  // The directory where we'll keep our backups. If empty, we'll try to put them in
+  // D:/Sublime Text Backups
+  "backup_dir": "D:/Sublime Text Backups",
 
-		// If true, also save a backup copy any time a file is opened (if backup file not exists)
-		"backup_on_open_file": true,
+  // If true, also save a backup copy any time a file is opened (if backup file not exists)
+  "backup_on_open_file": true,
 
-		// If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23/myfile.php
-		"backup_per_day": true,
+  // If true, backups saved per day, in separate folders, for example D:/Sublime Text Backups/2013-05-23/myfile.php
+  "backup_per_day": true,
 
-		// If set, backups saved per second. possible values: false, "folder" or "file"
-		// false - disabled backup per second
-		// "folder" - backup example D:/Sublime Text Backups/2013-05-23/095034/myfile.php
-		// "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
-		// to use this feature, you must have enabled backup_per_day setting
-		"backup_per_time": "file",
+  // If set, backups saved per second. possible values: false, "folder" or "file"
+  // false - disabled backup per second
+  // "folder" - backup example D:/Sublime Text Backups/2013-05-23/095034/myfile.php
+  // "file" - backup example D:/Sublime Text Backups/2013-05-23/myfile_095034.php
+  // to use this feature, you must have enabled backup_per_day setting
+  "backup_per_time": "file",
 
-		// Files larger than this many bytes won't be backed up.
-		"max_backup_file_size_bytes": 262144, // = 256 KB
+  // Files larger than this many bytes won't be backed up.
+  "max_backup_file_size_bytes": 262144, // = 256 KB
 
-		// Files older than X days will be deleted. If 0 - auto delete disabled
-		"delete_old_backups": 0, // days to delete
+  // Files older than X days will be deleted. If 0 - auto delete disabled
+  "delete_old_backups": 0, // days to delete
 
-		// ignore files/folders which match regexes
-		"ignore_regexes": [
-			// VCS folders
-			"/\\.svn/", "/\\.hg/", "/\\.git/", "/\\.bzr/"
-			// binary extensions
-			,"\\.(jpg|JPG|jpeg|JPEG|pjpeg|PJPEG|gif|GIF|png|PNG|apng|APNG|bmp|BMP|mp3|MP3|mid|MID|wav|WAV|au|AU|mp4|MP4|3gp|3GP|avi|AVI|wmv|WMV|mpeg|MPEG|mpg|MPG|mkv|MKV|swf|SWF|flv|FLV|zip|ZIP|rar|RAR|tar|TAR|tgz|TGZ|gz|GZ|bz2?|BZ2?|pdf|PDF|docx?|DOCX?|xlsx?|XLSX?|pptx?|PPTX?|rtf|RTF|psd|PSD|cdr|CDR|fla|FLA|exe|EXE)$"
-		],
+  // ignore files/folders which match regexes
+  "ignore_regexes": [
+    // VCS folders
+    "/\\.svn/", "/\\.hg/", "/\\.git/", "/\\.bzr/"
+    // binary extensions
+    ,"\\.(jpg|JPG|jpeg|JPEG|pjpeg|PJPEG|gif|GIF|png|PNG|apng|APNG|bmp|BMP|mp3|MP3|mid|MID|wav|WAV|au|AU|mp4|MP4|3gp|3GP|avi|AVI|wmv|WMV|mpeg|MPEG|mpg|MPG|mkv|MKV|swf|SWF|flv|FLV|zip|ZIP|rar|RAR|tar|TAR|tgz|TGZ|gz|GZ|bz2?|BZ2?|pdf|PDF|docx?|DOCX?|xlsx?|XLSX?|pptx?|PPTX?|rtf|RTF|psd|PSD|cdr|CDR|fla|FLA|exe|EXE)$"
+  ],
 
-		// If true, backup file opened in same line as cursor in original file
-		"open_in_same_line": true,
+  // If true, backup file opened in same line as cursor in original file
+  "open_in_same_line": true,
 
-		// If true, show backup previews (only in ST3)
-		"show_previews": true
-	}
+  // If true, show backup previews (only in ST3)
+  "show_previews": true
+}
 ```
-
 
 
 ## Installation
@@ -78,31 +77,39 @@ Once you install Package Control, restart Sublime Text and bring up the Command 
 
 **With Git:** Clone the repository in your Sublime Text "Packages" directory:
 
-    git clone https://github.com/akalongman/sublimetext-autobackups.git AutoBackups
-
+```bash
+git clone https://github.com/akalongman/sublimetext-autobackups.git AutoBackups
+```
 
 The "Packages" directory is located at:
 
 * OS X:
 
-        ST2: ~/Library/Application Support/Sublime Text 2/Packages/
-        ST3: ~/Library/Application Support/Sublime Text 3/Packages/
+```
+ST2: ~/Library/Application Support/Sublime Text 2/Packages/
+ST3: ~/Library/Application Support/Sublime Text 3/Packages/
+```
 
 * Linux:
 
-        ST2: ~/.config/sublime-text-2/Packages/
-        ST3: ~/.config/sublime-text-3/Packages/
+```
+ST2: ~/.config/sublime-text-2/Packages/
+ST3: ~/.config/sublime-text-3/Packages/
+```
 
 * Windows:
 
-        ST2: %APPDATA%/Sublime Text 2/Packages/
-        ST3: %APPDATA%/Sublime Text 3/Packages/
-
+```
+ST2: %APPDATA%/Sublime Text 2/Packages/
+ST3: %APPDATA%/Sublime Text 3/Packages/
+```
 
 
 To see if plugin working, open the console with the `View->Show Console` menu item. When you save a file, you should see a line like this, indicating that the file has been backed up:
 
-    Backup saved to: D:/Sublime Text Backups/2013-05-23/myfile_095034.php
+```
+Backup saved to: D:/Sublime Text Backups/2013-05-23/myfile_095034.php
+```
 
 ## Backup size considerations
 
