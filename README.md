@@ -83,27 +83,15 @@ git clone https://github.com/akalongman/sublimetext-autobackups.git AutoBackups
 
 The "Packages" directory is located at:
 
-* OS X:
-
-```
-ST2: ~/Library/Application Support/Sublime Text 2/Packages/
-ST3: ~/Library/Application Support/Sublime Text 3/Packages/
-```
-
-* Linux:
-
-```
-ST2: ~/.config/sublime-text-2/Packages/
-ST3: ~/.config/sublime-text-3/Packages/
-```
-
-* Windows:
-
-```
-ST2: %APPDATA%/Sublime Text 2/Packages/
-ST3: %APPDATA%/Sublime Text 3/Packages/
-```
-
+ - OS X:
+   - ST2 `~/Library/Application Support/Sublime Text 2/Packages/`
+   - ST3 `~/Library/Application Support/Sublime Text 3/Packages/`
+ - Linux:
+   - ST2 `~/.config/sublime-text-2/Packages/`
+   - ST3 `~/.config/sublime-text-3/Packages/`
+ - Windows:
+   - ST2 `%APPDATA%/Sublime Text 2/Packages/`
+   - ST3 `%APPDATA%/Sublime Text 3/Packages/`
 
 To see if plugin working, open the console with the `View->Show Console` menu item. When you save a file, you should see a line like this, indicating that the file has been backed up:
 
