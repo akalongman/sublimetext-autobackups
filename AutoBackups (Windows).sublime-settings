@@ -23,7 +23,7 @@
 	// prefix: "auto-save.myfile_095034.php"
 	// suffix: myfile_095034.auto-save.php
 	// if None or false won't change the name
-	"backup_name_mode":"prefix",
+	"backup_name_mode": false,
 
 	// Files larger than this many bytes won't be backed up.
 	"max_backup_file_size_bytes": 262144, // = 256 KB
